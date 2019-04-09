@@ -1,0 +1,62 @@
+<html>
+	<head>
+		<title>SnowBall</title>
+	
+		<style>
+			body{ margin: 0; }
+			canvas{ width: 100; height: 100%; };
+		</style>
+	
+	</head>
+	
+	<body>
+		<div id="WebGL" style="position: absolute; left:0px; top:0px"></div>
+		<script src="js/three.min.js"></script>
+		<script src='js/OrbitControls.js'></script>
+		<script src="js/loaders/MTLLoader.js"></script>
+		<script src="js/loaders/OBJLoader.js"></script>
+
+		<script type="x-shader/x-vertex" id="vertexShaderSNOW">
+		// attribute float base_angle;
+		// attribute float offsetX;
+		attribute float initial_position;
+		attribute float initial_position_x;
+		attribute float initial_position_z;
+		attribute float dimension;
+		attribute float acceleration;
+		
+		uniform float time;
+
+		varying vec4 vUv;
+		varying vec2 offset;
+		void main() 
+		{
+		    vec3 p = position;
+		   	//offset = vec2(offsetX, offsetZ);
+	        p.x = initial_position_x;
+	        p.z = initial_position_z;
+	        p.y = initial_position - time * acceleration;
+		    
+			gl_Position = projectionMatrix * modelViewMatrix * vec4(p, 1.0);
+		    
+		    vUv = projectionMatrix * vec4(p, 1.0);
+		    gl_PointSize = 2.0*acceleration;
+		}
+		</script>
+		<script type="x-shader/x-fragment" id="fragmentShaderSNOW">
+		varying vec4 vUv;
+		varying vec2 offset;
+
+		uniform float time;
+
+		void main() {
+			
+			gl_FragColor = vec4(0.0, 0.0, 0.0, 0.0);
+
+		}
+		</script>
+		<script src="js/main.js"></script>
+
+
+	</body>
+</html>
