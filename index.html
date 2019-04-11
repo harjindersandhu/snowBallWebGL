@@ -15,17 +15,20 @@
 		<script src='js/OrbitControls.js'></script>
 		<script src="js/loaders/MTLLoader.js"></script>
 		<script src="js/loaders/OBJLoader.js"></script>
-
 		<script type="x-shader/x-vertex" id="vertexShaderSNOW">
-		// attribute float base_angle;
-		// attribute float offsetX;
+		//attribute float base_angle;
+		//attribute float offsetX;
 		attribute float initial_position;
 		attribute float initial_position_x;
 		attribute float initial_position_z;
 		attribute float dimension;
 		attribute float acceleration;
+		attribute float level_snow;
+		attribute float count_snow;
+
 		
 		uniform float time;
+		uniform float counter;
 
 		varying vec4 vUv;
 		varying vec2 offset;
@@ -35,12 +38,25 @@
 		   	//offset = vec2(offsetX, offsetZ);
 	        p.x = initial_position_x;
 	        p.z = initial_position_z;
-	        p.y = initial_position - time * acceleration;
+	        
+	        if (initial_position - time * acceleration > -32.5){
+	        	
+	        	p.y = initial_position - time * acceleration;
+	        }
+
+	        else{
+	        	p.y = -32.5;
+	        }
+
+	    
+	        //p.x*p.x + p.y*p.y + p.z*z < 2500;
 		    
 			gl_Position = projectionMatrix * modelViewMatrix * vec4(p, 1.0);
 		    
 		    vUv = projectionMatrix * vec4(p, 1.0);
-		    gl_PointSize = 2.0*acceleration;
+		    
+			gl_PointSize = 2.0*acceleration;
+
 		}
 		</script>
 		<script type="x-shader/x-fragment" id="fragmentShaderSNOW">
@@ -50,12 +66,14 @@
 		uniform float time;
 
 		void main() {
+
+			gl_FragColor = vec4(1.0, 0.0, 1.0, 1.0);
 			
-			gl_FragColor = vec4(0.0, 0.0, 0.0, 0.0);
 
 		}
 		</script>
 		<script src="js/main.js"></script>
+
 
 
 	</body>
