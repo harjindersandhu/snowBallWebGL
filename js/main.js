@@ -1,9 +1,8 @@
-
 var container, scene, camera, controls;
 
 			// SCENE
 		    scene = new THREE.Scene();
-		    scene.background = new THREE.Color( 0x262626);
+		    scene.background = new THREE.Color(0x262626);
 		    
 		    // CAMERA
 		    var SCREEN_WIDTH = window.innerWidth, SCREEN_HEIGHT = window.innerHeight;
@@ -29,7 +28,6 @@ var container, scene, camera, controls;
 		    controls.maxPolarAngle = Math.PI/2;
 		    controls.center = lookingPosition;
 
-			
 		    // LIGHT
 		    var light = new THREE.PointLight(0xffffff);
 		    light.position.set(0, 555 ,0);
@@ -38,8 +36,8 @@ var container, scene, camera, controls;
     		scene.add(ambientLight);
 
     		//SPHERE
-			//Raggio, meridiani, paralleli, ?, sezione verticale sfera, thetaStart taglia la sfera orizontalmente positivo da sopra negativo da sotto
-			var geometry = new THREE.SphereBufferGeometry(50, 0, 0, 0, 2*Math.PI, -0.8, 1 * Math.PI);
+			//(raggio, meridiani, widthSegments, heightSegments, sezione verticale sfera, thetaStart taglia la sfera orizontalmente positivo da sopra negativo da sotto)
+			var geometry = new THREE.SphereBufferGeometry(50, 50, 50, 0, 2*Math.PI, -0.8, 1 * Math.PI);
 			var material = new THREE.MeshBasicMaterial( {color: 0x87CEF4,transparent:true, opacity:0.1, wireframe: false} );
 			material.side = THREE.DoubleSide;
 			
@@ -47,6 +45,7 @@ var container, scene, camera, controls;
 			scene.add(sphere);
 			
 			//CYLINDER GEOMETRY
+			//(radiusTop : Float, radiusBottom : Float, height : Float, radialSegments : Integer, heightSegments : Integer, openEnded : Boolean, thetaStart : Float, thetaLength : Float))
 			var geometry = new THREE.CylinderBufferGeometry(35, 45, 25, 100);
 			var cylinderMaterials = 
 			[
@@ -80,39 +79,44 @@ var container, scene, camera, controls;
 			// cylinder_2.position.y = -34;
 
 
-
-
-
 			//SNOW GEOMETRY
 			var n = 10000; // Numero particelle
-
-
-			var init_pos = new Float32Array(n);
+			var init_pos_y = new Float32Array(n);
 			var init_pos_z = new Float32Array(n);
 			var init_pos_x = new Float32Array(n);
 			var acceleration = new Float32Array(n);
 			//var count = new Int8Array();
 
 			for(i = 0; i < n; i++){
-			    init_pos[i] = 100 + (Math.random()-0.5)*20;
+			    init_pos_y[i] = 100 + (Math.random()-0.5)*20;
 			    init_pos_x[i] = (Math.random()-0.5)*100;
 			    init_pos_z[i] = (Math.random()-0.5)*80;
 			    acceleration[i] = Math.random()*1;
 			} 
 			//count = 0;
 			var snowGeometry = new THREE.BufferGeometry();
-				// Il buffer viene letto tre a tre(x,y,z)
 				snowGeometry.addAttribute('position', new THREE.BufferAttribute(new Float32Array(n*3), 3));
-				snowGeometry.addAttribute('initial_position', new THREE.BufferAttribute(init_pos, 1));
 				snowGeometry.addAttribute('initial_position_x', new THREE.BufferAttribute(init_pos_x, 1));
+				snowGeometry.addAttribute('initial_position_y', new THREE.BufferAttribute(init_pos_y, 1));
 				snowGeometry.addAttribute('initial_position_z', new THREE.BufferAttribute(init_pos_z, 1));
 				snowGeometry.addAttribute('acceleration', new THREE.BufferAttribute(acceleration, 1));
 				//snowGeometry.addAttribute('count_snow', new THREE.BufferAttribute(count);
 
+			var snowColor = new Float32Array(3);
+    		snowColor[0] = 0;
+    		snowColor[1] = 0;
+    		snowColor[2] = 0;
+    		var traspColor = new Float32Array(3);
+	        traspColor[0] = 1;
+    		traspColor[1] = 1;
+    		traspColor[2] = 1;
 			var snowMaterial= new THREE.ShaderMaterial({
 			    uniforms: snowUniforms = {
 			        time: {value: 10.0},
-			        counter: {value: 0.0}
+			        counter: {value: 0.0},
+			        customColor: {value: snowColor},
+			        customColor2: {value: traspColor},
+			        customOpacity: {value: 1.0}
 			        // stretch: {value: new THREE.Vector3(190, 30, 135)},
 			        // shadowType: {value: 1.0}
 			    },
@@ -125,7 +129,7 @@ var container, scene, camera, controls;
 			scene.add(snow);
 
 			//MODELS
-			// Add Tree Object
+			// Add tree object
 		    console.log("Inserting obj")
 		    var manager = new THREE.LoadingManager();
 		    manager.onProgress = function ( item, loaded, total ) {
@@ -147,19 +151,17 @@ var container, scene, camera, controls;
 		            object.scale.z = 10;
 		            scene.add( object );
 		            tree_obj = object;
-		        }, function(){}, function(){} );
+		        }, function(){}, function(){});
 		    });
 
 		    
 			
 		 	var update = function(){
 				//t += 0.01;
-				snowUniforms.time.value += 0.9;
+				snowUniforms.time.value += 0.3;
 				console.log( snowUniforms.counter.value )
 				//cylinder.rotation.y += 0.01;
 				//sphere.rotation.y += 0.01;
-	
-
     			
 			};
 			
