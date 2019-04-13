@@ -1,6 +1,6 @@
 <html>
 	<head>
-		<title>SnowBall</title>
+		<title>Snow ball</title>
 	
 		<style>
 			body{ margin: 0; }
@@ -17,20 +17,22 @@
 		<script src="js/loaders/OBJLoader.js"></script>
 		<script type="x-shader/x-vertex" id="vertexShaderSNOW">
 		//attribute float base_angle;
-		//attribute float offsetX;
-		attribute float initial_position;
+		//attribute float offsetX; 
 		attribute float initial_position_x;
+		attribute float initial_position_y;
 		attribute float initial_position_z;
 		attribute float dimension;
 		attribute float acceleration;
 		attribute float level_snow;
 		attribute float count_snow;
 
-		
 		uniform float time;
 		uniform float counter;
+		uniform vec3  customColor;
+		uniform vec3  customColor2;
 
 		varying vec4 vUv;
+		varying vec4 vColor;
 		varying vec2 offset;
 		void main() 
 		{
@@ -38,43 +40,47 @@
 		   	//offset = vec2(offsetX, offsetZ);
 	        p.x = initial_position_x;
 	        p.z = initial_position_z;
-	        
-	        if (initial_position - time * acceleration > -32.5){
-	        	
-	        	p.y = initial_position - time * acceleration;
+	        if (initial_position_y - time * acceleration > -32.5){	
+	        	p.y = initial_position_y - time * acceleration;
 	        }
-
 	        else{
 	        	p.y = -32.5;
 	        }
 
-	    
-	        //p.x*p.x + p.y*p.y + p.z*z < 2500;
+	        float opacity;
+			if (p.x*p.x + p.y*p.y + p.z*p.z > 2490.0){ //Da correggere
+				opacity = 0.85;
+				vColor = vec4( customColor, opacity );
+			}
+			else{
+				opacity = 1.0;
+    			vColor = vec4( customColor2, opacity );
+
+			}
 		    
 			gl_Position = projectionMatrix * modelViewMatrix * vec4(p, 1.0);
 		    
 		    vUv = projectionMatrix * vec4(p, 1.0);
 		    
 			gl_PointSize = 2.0*acceleration;
-
 		}
 		</script>
+
 		<script type="x-shader/x-fragment" id="fragmentShaderSNOW">
 		varying vec4 vUv;
 		varying vec2 offset;
+		varying vec4  vColor;
+
 
 		uniform float time;
+		uniform vec3  customColor;
 
 		void main() {
-
-			gl_FragColor = vec4(1.0, 0.0, 1.0, 1.0);
-			
+			gl_FragColor = vColor;
 
 		}
 		</script>
 		<script src="js/main.js"></script>
-
-
 
 	</body>
 </html>
