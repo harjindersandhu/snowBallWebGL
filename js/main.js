@@ -2,7 +2,7 @@ var container, scene, camera, controls;
 
 			// SCENE
 		    scene = new THREE.Scene();
-		    scene.background = new THREE.Color(0x262626);
+		    scene.background = new THREE.Color( 0x262626);
 		    
 		    // CAMERA
 		    var SCREEN_WIDTH = window.innerWidth, SCREEN_HEIGHT = window.innerHeight;
@@ -28,6 +28,7 @@ var container, scene, camera, controls;
 		    controls.maxPolarAngle = Math.PI/2;
 		    controls.center = lookingPosition;
 
+			
 		    // LIGHT
 		    var light = new THREE.PointLight(0xffffff);
 		    light.position.set(0, 555 ,0);
@@ -35,9 +36,13 @@ var container, scene, camera, controls;
 		    var ambientLight = new THREE.AmbientLight(0xffffff, 0.3);
     		scene.add(ambientLight);
 
+    		
+    		
+
+			
     		//SPHERE
-			//(raggio, meridiani, widthSegments, heightSegments, sezione verticale sfera, thetaStart taglia la sfera orizontalmente positivo da sopra negativo da sotto)
-			var geometry = new THREE.SphereBufferGeometry(50, 50, 50, 0, 2*Math.PI, -0.8, 1 * Math.PI);
+			//Raggio, meridiani, paralleli, ?, sezione verticale sfera, thetaStart taglia la sfera orizontalmente positivo da sopra negativo da sotto
+			var geometry = new THREE.SphereBufferGeometry(50, 20, 20, 0, 2*Math.PI, -0.8)//, 0.5 * Math.PI);
 			var material = new THREE.MeshBasicMaterial( {color: 0x87CEF4,transparent:true, opacity:0.1, wireframe: false} );
 			material.side = THREE.DoubleSide;
 			
@@ -45,12 +50,11 @@ var container, scene, camera, controls;
 			scene.add(sphere);
 			
 			//CYLINDER GEOMETRY
-			//(radiusTop : Float, radiusBottom : Float, height : Float, radialSegments : Integer, heightSegments : Integer, openEnded : Boolean, thetaStart : Float, thetaLength : Float))
 			var geometry = new THREE.CylinderBufferGeometry(35, 45, 25, 100);
 			var cylinderMaterials = 
 			[
 			new THREE.MeshBasicMaterial({ map: new THREE.TextureLoader().load('img/wood.jpg'), side : THREE.DoubleSide}),
-			new THREE.MeshBasicMaterial({ map: new THREE.TextureLoader().load('img/grass.jpg'), side : THREE.DoubleSide}),
+			new THREE.MeshBasicMaterial({ map: new THREE.TextureLoader().load('img/snow.jpg'), side : THREE.DoubleSide}),
 			new THREE.MeshBasicMaterial({ map: new THREE.TextureLoader().load('img/wood.jpg'), side : THREE.DoubleSide}),
 			];
 			
@@ -64,59 +68,47 @@ var container, scene, camera, controls;
 			var skater_obj = null;
 
 
-			//SECOND CYLINDER
-			var geometry = new THREE.CylinderBufferGeometry(37, 35, 2, 100);
-			var snow_cylinderMaterials = 
-			[
-			new THREE.MeshBasicMaterial({ map: new THREE.TextureLoader().load('img/snow.jpg'), side : THREE.DoubleSide}),
-			new THREE.MeshBasicMaterial({ map: new THREE.TextureLoader().load('img/snow.jpg'), side : THREE.DoubleSide}),
-			new THREE.MeshBasicMaterial({ map: new THREE.TextureLoader().load('img/snow.jpg'), side : THREE.DoubleSide}),
-			];
-			var material = new THREE.MeshFaceMaterial(snow_cylinderMaterials);
-			var cylinder_2 = new THREE.Mesh(geometry, material);
-
-			// scene.add(cylinder_2);
-			// cylinder_2.position.y = -34;
-
-
 			//SNOW GEOMETRY
-			var n = 10000; // Numero particelle
-			var init_pos_y = new Float32Array(n);
+			var n = 500000; // Numero particelle
+
+
+			var init_pos = new Float32Array(n);
 			var init_pos_z = new Float32Array(n);
 			var init_pos_x = new Float32Array(n);
 			var acceleration = new Float32Array(n);
-			//var count = new Int8Array();
-
+			var min_level = new Float32Array(n);
 			for(i = 0; i < n; i++){
-			    init_pos_y[i] = 100 + (Math.random()-0.5)*20;
+			    init_pos[i] = 100 + (Math.random()-0.5)*20;
 			    init_pos_x[i] = (Math.random()-0.5)*100;
 			    init_pos_z[i] = (Math.random()-0.5)*80;
 			    acceleration[i] = Math.random()*1;
+			    min_level[i] = Math.random()*5;
+			    if(init_pos_z[i] > -7 && init_pos_z[i] < 7 ){
+			    	if(init_pos_x[i] > -7 && init_pos_x[i] < 7 )
+			    		min_level[i] = 13+Math.random()*2;
+			    	if(init_pos_x[i] > -5 && init_pos_x[i] < 5 )
+			    		min_level[i] = 15+Math.random()*2;
+			    	if(init_pos_x[i] > -3 && init_pos_x[i] < 3 )
+			    		min_level[i] = 17+Math.random()*2;
+			    	if(init_pos_x[i] > -2 && init_pos_x[i] < 2 )
+			    		min_level[i] = 18+Math.random()*2;
+			    	
+				}
 			} 
-			//count = 0;
-			var snowGeometry = new THREE.BufferGeometry();
+			//var snowSphereGeometry = new THREE.SphereBufferGeometry(50, 20, 20, 0, 2*Math.PI, -0.8)
+			var snowGeometry = new THREE.BufferGeometry();//.fromGeometry(snowSphereGeometry);
+				// Il buffer viene letto tre a tre(x,y,z)
 				snowGeometry.addAttribute('position', new THREE.BufferAttribute(new Float32Array(n*3), 3));
+				snowGeometry.addAttribute('initial_position', new THREE.BufferAttribute(init_pos, 1));
 				snowGeometry.addAttribute('initial_position_x', new THREE.BufferAttribute(init_pos_x, 1));
-				snowGeometry.addAttribute('initial_position_y', new THREE.BufferAttribute(init_pos_y, 1));
 				snowGeometry.addAttribute('initial_position_z', new THREE.BufferAttribute(init_pos_z, 1));
 				snowGeometry.addAttribute('acceleration', new THREE.BufferAttribute(acceleration, 1));
-				//snowGeometry.addAttribute('count_snow', new THREE.BufferAttribute(count);
+				snowGeometry.addAttribute('min_level', new THREE.BufferAttribute(min_level, 1));
 
-			var snowColor = new Float32Array(3);
-    		snowColor[0] = 0;
-    		snowColor[1] = 0;
-    		snowColor[2] = 0;
-    		var traspColor = new Float32Array(3);
-	        traspColor[0] = 1;
-    		traspColor[1] = 1;
-    		traspColor[2] = 1;
 			var snowMaterial= new THREE.ShaderMaterial({
 			    uniforms: snowUniforms = {
 			        time: {value: 10.0},
-			        counter: {value: 0.0},
-			        customColor: {value: snowColor},
-			        customColor2: {value: traspColor},
-			        customOpacity: {value: 1.0}
+			        count: {value: -32.5}
 			        // stretch: {value: new THREE.Vector3(190, 30, 135)},
 			        // shadowType: {value: 1.0}
 			    },
@@ -129,7 +121,7 @@ var container, scene, camera, controls;
 			scene.add(snow);
 
 			//MODELS
-			// Add tree object
+			// Add Tree Object
 		    console.log("Inserting obj")
 		    var manager = new THREE.LoadingManager();
 		    manager.onProgress = function ( item, loaded, total ) {
@@ -151,17 +143,47 @@ var container, scene, camera, controls;
 		            object.scale.z = 10;
 		            scene.add( object );
 		            tree_obj = object;
-		        }, function(){}, function(){});
+		        }, function(){}, function(){} );
 		    });
 
-		    
+		    // //Add skater object
+		    // console.log("Inserting obj")
+		    // var manager = new THREE.LoadingManager();
+		    // manager.onProgress = function ( item, loaded, total ) {
+		    //     console.log( item, loaded, total );
+		    // };
+		    // var mtlLoader = new THREE.MTLLoader(manager);
+		    // mtlLoader.setPath( 'obj/' );
+		    // mtlLoader.load( 'ski.mtl', function( materials ) {
+		    //     materials.preload();
+		    //     var objLoader = new THREE.OBJLoader(manager);
+		    //     objLoader.setMaterials( materials );
+		    //     objLoader.setPath( 'obj/' );
+		    //     objLoader.load( 'ski.obj', function ( object ) {
+		    //         object.position.y = -36;
+		    //         object.position.x = 20;
+		    //         object.position.z = 5;
+		    //         object.scale.x = 2;
+		    //         object.scale.y = 2;
+		    //         object.scale.z = 2;
+		    //         object.rotation.y += 0.03;
+    		// 		//object.position.x = 20*Math.cos(t) + 0;
+    		// 		//object.position.z = 20*Math.sin(t) + 0;
+		    //         scene.add( object );
+		    //         skater_obj = object;
+		    //     }, function(){}, function(){} );
+		    // });
 			
 		 	var update = function(){
 				//t += 0.01;
-				snowUniforms.time.value += 0.3;
-				console.log( snowUniforms.counter.value )
-				//cylinder.rotation.y += 0.01;
-				//sphere.rotation.y += 0.01;
+				snowUniforms.time.value += 0.1*10;
+
+				cylinder.rotation.y += 0.01;
+				sphere.rotation.y += 0.01;
+				// skater_obj.position.x = 30*Math.cos(t) + 0;
+    // 			skater_obj.position.z = 30*Math.sin(t) + 0;
+    // 			skater_obj.rotation.y -=0.06;
+
     			
 			};
 			
