@@ -1,5 +1,5 @@
 			var container, scene, camera, controls;
-			var n = 50a000; // Numero particelle di neve
+			var n = 50000; // Numero particelle di neve
 
 
 			// SCENE
