@@ -152,7 +152,7 @@
 
 			// TREE
 		    console.log("Inserting obj")
-		    var manager = new THREE.LoadingManagera();
+		    var manager = new THREE.LoadingManager();
 		    manager.onProgress = function (item, loaded, total) {
 		        console.log( item, loaded, total );
 		    };
