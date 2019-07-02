@@ -29,6 +29,21 @@ The system has good performances as expected.
   * Size: thickness of particles
   * Speed: magnitude of  velocity V
 * Uniform rectilinear motion on y-axis: y'= y - s * t, x = x', z = z'
+* Snowfall stops when it touches:
+  * The ground
+  * The house
+  * The tree
+* Each particle has an attribute min_level, whose value is based on the coordinates X and Z.
+* Three differents values with surfaces:
+  * Ground: min_level of p0 is equal to base plan.
+  * House: min_level of p1(mlp1) is: H - b *  (Xp1 - L/2 ) - r
+  * Tree: min_level of p2(mlp2) is: H - a *  (xp1^2 + zp1^2) - r
+
+
+
+
+
+
 
 
 
