@@ -38,6 +38,8 @@ The system has good performances as expected.
   * Ground: min_level of p0 is equal to base plan.
   * House: min_level of p1(mlp1) is: H - b *  (Xp1 - L/2 ) - r
   * Tree: min_level of p2(mlp2) is: H - a *  (xp1^2 + zp1^2) - r
+  
+ ![picture alt](./images/snowformulation.jpg)
 
 
 
