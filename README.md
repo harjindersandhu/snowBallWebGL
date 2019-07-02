@@ -45,11 +45,11 @@ The system has good performances as expected.
 
 ### Performances 
 * Using a Macbook pro and Safari as reference:
-Snow Particles  | FPS
-------------- | -------------
-50            | 60
-100           | 60
-150           | 60       
+| Snow Particles  | FPS         |
+|:------------- :|: -------------:|
+| 50            | 60            |
+| 100           | 60            |
+| 150           | 60            |       
 
 
 
