@@ -24,11 +24,11 @@ The system has good performances as expected.
 
 
 ### Snow formulation
--All N vertices start from a cylinder over glass sphere.
--Each one has a random value s∈(0,1] and it’s used for two purposes:
-* Size: thickness of particles
-* Speed: magnitude of  velocity V
-** Uniform rectilinear motion on y-axis:
+* All N vertices start from a cylinder over glass sphere.
+* Each one has a random value s∈(0,1] and it’s used for two purposes:
+  * Size: thickness of particles
+  * Speed: magnitude of  velocity V
+* Uniform rectilinear motion on y-axis:
 
 
 
