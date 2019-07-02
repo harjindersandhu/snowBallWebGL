@@ -15,10 +15,10 @@
 		<script src="js/loaders/MTLLoader.js"></script>
 		<script src="js/Stats.js"></script>
 		<script type='text/javascript' src='js/DAT.GUI.min.js'></script>
+		
 		<script type="x-shader/x-vertex" id="vertexShaderSNOW">
 
-		
-		attribute float initial_position_x;
+		attribute float initial_position_x;  
 		attribute float initial_position_y;
 		attribute float initial_position_z;
 		attribute float dimension;
@@ -26,11 +26,12 @@
 		attribute float level_snow;
 		attribute float count_snow;
 		attribute float min_level;
+		attribute float transparent; 
 
 		uniform float time;
 		uniform float counter;
-		uniform vec3  customColor;
-		uniform vec3  customColor2;
+		uniform vec3 customColor;
+		uniform vec3 customColor2;
 
 		varying vec4 vUv;
 		varying vec4 vColor;
@@ -38,60 +39,55 @@
 		
 		void main(){
 
-		    vec3 p = position;
-		   	//offset = vec2(offsetX, offsetZ);
+		    vec3 p = position; 
 	        p.x = initial_position_x;
 	        p.z = initial_position_z;
 	        float diffX;
 	        float diffZ;
+	        float opacity;
 	        
-	        
-	        if (initial_position_y - time * acceleration > -33.8 + min_level){	
+	        if (initial_position_y - time * acceleration > -32.8 + min_level){	
 	        	p.y = initial_position_y - time * acceleration;
 	        }
 	        else{
 	        	p.y = -33.8 + min_level;
 	        }
 
-	        float opacity;
+	        //This code is needed in case the snow fall cylinder has the same radius of the sphere and it makes the snow move inside the sphere
+	   //       if (p.y < -30.0){
+	   //      	if (p.x*p.x + p.y*p.y + p.z*p.z > 2490.0 ){
+	   //      	diffX = abs(p.x) - 20.0 - 16.0*acceleration;
+				// diffZ = abs(p.z) - 20.0 - 16.0*acceleration;
+				// if (initial_position_x > 0.0 && initial_position_z > 0.0){
+				// 	p.x = diffX;
+				// 	p.z = diffZ;
+				// }
+				// if (initial_position_x > 0.0 && initial_position_z < 0.0){
+				// 	p.x = diffX;
+				// 	p.z = - diffZ;
+				// }
+				// if (initial_position_x < 0.0 && initial_position_z > 0.0){
+				// 	p.x = - diffX;
+				// 	p.z = diffZ;
+				// }
+				// if (initial_position_x < 0.0 && initial_position_z < 0.0){
+				// 	p.x = - diffX;
+				// 	p.z = - diffZ;
+				// }
+	   //      }
+	   //      }
 
-	        if (p.y < -30.0){
-	        	if (p.x*p.x + p.z*p.z > 1400.0 ){
-	        	diffX = abs(p.x) - 20.0 - 16.0*acceleration;
-				diffZ = abs(p.z) - 20.0 - 16.0*acceleration;
-				if (initial_position_x > 0.0 && initial_position_z > 0.0){
-					p.x = diffX;
-					p.z = diffZ;
-				}
-				if (initial_position_x > 0.0 && initial_position_z < 0.0){
-					p.x = diffX;
-					p.z = - diffZ;
-				}
-				if (initial_position_x < 0.0 && initial_position_z > 0.0){
-					p.x = - diffX;
-					p.z = diffZ;
-				}
-				if (initial_position_x < 0.0 && initial_position_z < 0.0){
-					p.x = - diffX;
-					p.z = - diffZ;
-				}
-	        }
-
-	        }
-	        
 			if (p.x*p.x + p.y*p.y + p.z*p.z > 2490.0){ 
-				opacity = 0.62;
-				vColor = vec4( customColor, opacity ); 
+				opacity = 0.40;
+				vColor = vec4( customColor, opacity ); 	
 			}
 			else{
 				opacity = 1.0;
     			vColor = vec4( customColor2, opacity );
 			}
 		    
-			gl_Position = projectionMatrix * modelViewMatrix * vec4(p, 1.0);
-		    
+			gl_Position = projectionMatrix * modelViewMatrix * vec4(p, 1.0);	    
 		    vUv = projectionMatrix * vec4(p, 1.0);
-		    
 			gl_PointSize = 3.0*acceleration;
 		}
 
@@ -106,12 +102,11 @@
 		uniform vec3  customColor;
 
 		void main(){
-			gl_FragColor = vColor;
+			gl_FragColor = vColor;	
 		}
-
 		</script>
 		
-		<script src="js/main.js"></script>
+		<script src="js/snowball.js"></script>
 
 	</body>
 </html>
