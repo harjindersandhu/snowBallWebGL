@@ -1,7 +1,7 @@
- ![picture alt](./images/first.png)
+
 
 # PARTICLE REPRODUCTION OF SNOWFALL - THREE.js & WebGL
-
+ ![picture alt](./images/first.png)
 
 ### Aims
 * Create a particle-system representation of SnowGlobe. 
@@ -42,6 +42,14 @@ The system has good performances as expected.
   * Tree: min_level of p2(mlp2) is: H - a *  (xp1^2 + zp1^2) - r
   
  ![picture alt](./images/snowformulation.jpg)
+
+### Performances 
+* Using a Macbook pro and Safari as reference:
+Snow Particles  | FPS
+------------- | -------------
+50            | 60
+100           | 60
+150           | 60       
 
 
 
