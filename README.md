@@ -21,3 +21,30 @@ The system has good performances as expected.
 * Our aim is to create a snowfall effect into a snowball.
 * The snow will fall only in the ball and it will be cumulative.
 * Each particle of snow has its weight, that will determinate the fall’s speed.
+
+
+### Snow formulation
+-All N vertices start from a cylinder over glass sphere.
+-Each one has a random value s∈(0,1] and it’s used for two purposes:
+* Size: thickness of particles
+* Speed: magnitude of  velocity V
+-Uniform rectilinear motion on y-axis:
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
