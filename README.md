@@ -50,7 +50,10 @@ The system has good performances as expected.
 |:-------------:|:-------------:|
 | 50K            | 60fps        |
 | 100K           | 60fps        |
-| 150K           | 60fps        |       
+| 150K           | 60fps        |     
+
+
+### Developed by [Harjinder Sandhu](https://github.com/harjindersandhu/) and [Leonardo Casini](https://github.com/leonardocasini)
 
 
 
