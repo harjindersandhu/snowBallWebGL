@@ -28,7 +28,7 @@ The system has good performances as expected.
 * Each one has a random value s∈(0,1] and it’s used for two purposes:
   * Size: thickness of particles
   * Speed: magnitude of  velocity V
-* Uniform rectilinear motion on y-axis:
+* Uniform rectilinear motion on y-axis: y'= y - s * t, x = x', z = z'
 
 
 
