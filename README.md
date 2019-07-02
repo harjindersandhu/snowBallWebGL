@@ -1,3 +1,5 @@
+ ![picture alt](./images/first.png)
+
 # PARTICLE REPRODUCTION OF SNOWFALL - THREE.js & WebGL
 
 
