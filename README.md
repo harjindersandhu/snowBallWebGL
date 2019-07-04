@@ -55,8 +55,8 @@ The system has good performances as expected.
 
 ### Conclusions
 
-An example is reachable at : 
-The system can reproduce different scenario, the only difference would be in formulas describing the event
+* An example is reachable at : https://harjindersandhu.github.io
+* The system can reproduce different scenario, the only difference would be in formulas describing the event
 
 ### Developed by [Harjinder Sandhu](https://github.com/harjindersandhu/) and [Leonardo Casini](https://github.com/leonardocasini)
 
