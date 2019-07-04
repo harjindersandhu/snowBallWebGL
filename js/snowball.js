@@ -4,7 +4,7 @@
 
 			// SCENE
 		    scene = new THREE.Scene();
-		    scene.background = new THREE.Color(0x696969);
+		    scene.background = new THREE.Color(0x989898);
 		    
 		    // CAMERA
 		    var SCREEN_WIDTH = window.innerWidth, SCREEN_HEIGHT = window.innerHeight;
@@ -27,11 +27,15 @@
 
 			// CONTROLS
 		    controls = new THREE.OrbitControls( camera, renderer.domElement );
-		    controls.minDistance = 30;
-		    controls.maxDistance = 600;
+		    controls.minDistance = 10;
+		    controls.maxDistance = 340;
 		    controls.minHeight = 0;
 		    controls.maxPolarAngle = Math.PI/2;
 		    controls.center = lookingPosition;
+		    controls.enableRotate = true;
+		    controls.minPolarAngle = 0;
+		    controls.maxPolarAngle = Math.PI;
+
 
 		    // STATS
 		    stats = new Stats();
@@ -49,15 +53,24 @@
 			var light = new THREE.PointLight(0xffffff, 2.0, 600);
 			scene.add(light);
 
-			var directionalLight = new THREE.SpotLight(0xffffff, 2.0, 10000);
-			light.target = cylinder;
-			scene.add(directionalLight);
+			var spotLight = new THREE.SpotLight(0xffff00, 2.0, 100000);
+			spotLight.position.set( -18, 0, 0 );
+			spotLight.angle = Math.PI / 4;
+			spotLight.penumbra = 0.05;
+			spotLight.decay = 1;
+			spotLight.distance = 200;
+			spotLight.castShadow = true;
+			spotLight.shadow.mapSize.width = 1024;
+			spotLight.shadow.mapSize.height = 1024;
+			spotLight.shadow.camera.near = 10;
+			spotLight.shadow.camera.far = 200;
+			scene.add(spotLight);
 
 
     		//SPHERE
 			//(raggio, meridiani, widthSegments, heightSegments, sezione verticale sfera, thetaStart taglia la sfera orizontalmente positivo da sopra negativo da sotto)
 			var geometry = new THREE.SphereBufferGeometry(50, 50, 50, 0, 2*Math.PI, -0.8, 1 * Math.PI);
-			var material = new THREE.MeshBasicMaterial( {color: 0x87CEF4,transparent:true, opacity:0.1, wireframe: false} );
+			var material = new THREE.MeshBasicMaterial( {color: 0xd4e1ec,transparent:true, opacity:0.15, wireframe: false} );
 			material.side = THREE.DoubleSide;
 			var sphere = new THREE.Mesh(geometry, material);
 			sphere.castShadow = true; //default is false
@@ -79,33 +92,34 @@
 			
 			scene.add(cylinder);
 			cylinder.position.y = -47;
-
 			var tree_obj = null;
 
 
 
 			//SNOW GEOMETRY
-			
 			var init_pos_y = new Float32Array(n);
 			var init_pos_z = new Float32Array(n);
 			var init_pos_x = new Float32Array(n);
 			var acceleration = new Float32Array(n);
 			var min_level = new Float32Array(n);
-			//var count = new Int8Array();
 
-			for(i = 0; i < n; i++){
-			    init_pos_y[i] = 100 + (Math.random()-0.5)*20;
-			    init_pos_x[i] = (Math.random()-0.5)*100;
-			    init_pos_z[i] = (Math.random()-0.5)*100;
-			    acceleration[i] = Math.random()*1;
+			
+			for(i=0; i<n; i++){
+			var ptAngle = Math.random() * 2 * Math.PI;
+			var ptRadiusSq= Math.random() * 1250.0;
 
-			    // HOUSE 
+			init_pos_x[i] = Math.sqrt(ptRadiusSq) * Math.cos(ptAngle);
+			init_pos_y[i] = 60 + (Math.random()-0.5)*30;
+			init_pos_z[i] = Math.sqrt(ptRadiusSq) * Math.sin(ptAngle);
+			acceleration[i] = Math.random()*1;
+
+			    // Snow stops at house's top
 			    if( init_pos_x[i] > 7 && init_pos_z[i] > -12&&
 			    	init_pos_x[i] < 28 && init_pos_z[i] < 12){
 			    	min_level[i] = (-32.5 + 51.5 - Math.abs(init_pos_x[i]-17.5)*1.2) - Math.random()*2;	
 			    }
 
-			    // TREE
+			    // Snow stops at tree's top
 			     if((init_pos_x[i] + 9.7)**2 + (init_pos_z[i] - 0.5)**2 < 83){
 			     	base = init_pos_x[i] + 9.7;
 			     	altezza = init_pos_z[i]- 0.5;
@@ -113,7 +127,7 @@
 			    	min_level[i] = (34.5-4*(Math.sqrt(base**2 + altezza**2))**1) + Math.random()*2;	
 			    }
 			} 
-			//count = 0;
+			
 			var snowGeometry = new THREE.BufferGeometry();
 				snowGeometry.addAttribute('position', new THREE.BufferAttribute(new Float32Array(n*3), 3));
 				snowGeometry.addAttribute('initial_position_x', new THREE.BufferAttribute(init_pos_x, 1));
@@ -121,26 +135,24 @@
 				snowGeometry.addAttribute('initial_position_z', new THREE.BufferAttribute(init_pos_z, 1));
 				snowGeometry.addAttribute('acceleration', new THREE.BufferAttribute(acceleration, 1));
 				snowGeometry.addAttribute('min_level', new THREE.BufferAttribute(min_level, 1));
-				//snowGeometry.addAttribute('count_snow', new THREE.BufferAttribute(count);
+				
 
-			var snowColor = new Float32Array(3);
-    		snowColor[0] = 0;
-    		snowColor[1] = 0;
-    		snowColor[2] = 0;
-    		// WHITE
-    		var traspColor = new Float32Array(3);
-	        traspColor[0] = 1;
-    		traspColor[1] = 1;
-    		traspColor[2] = 1;
+			var snowColorOutside = new Float32Array(3);
+    		snowColorOutside[0] = 0;
+    		snowColorOutside[1] = 0;
+    		snowColorOutside[2] = 0;
+    		// Color of the snow inside the sphere
+    		var traspColorInside = new Float32Array(3);
+	        traspColorInside[0] = 1;
+    		traspColorInside[1] = 1;
+    		traspColorInside[2] = 1;
 			var snowMaterial= new THREE.ShaderMaterial({
 			    uniforms: snowUniforms = {
 			        time: {value: 10.0},
 			        counter: {value: 0.0},
-			        customColor: {value: snowColor},
-			        customColor2: {value: traspColor},
-			        customOpacity: {value: 1.0}
-			        // stretch: {value: new THREE.Vector3(190, 30, 135)},
-			        // shadowType: {value: 1.0}
+			       	customColor: {value: snowColorOutside},
+			        customColor2: {value: traspColorInside},
+			        customOpacity: {value: 1.0},
 			    },
 			    vertexShader: document.getElementById('vertexShaderSNOW').textContent,
 			    fragmentShader: document.getElementById('fragmentShaderSNOW').textContent,
@@ -151,7 +163,7 @@
 			// MODELS
 
 			// TREE
-		    console.log("Inserting obj")
+		    //console.log("Inserting obj")
 		    var manager = new THREE.LoadingManager();
 		    manager.onProgress = function (item, loaded, total) {
 		        console.log( item, loaded, total );
@@ -178,7 +190,7 @@
 		    
 
 		    // HOUSE
-		    console.log("Inserting house obj")
+		    //console.log("Inserting house obj")
 		    var manager = new THREE.LoadingManager(); 
 		    manager.onProgress = function (item, loaded, total) {
 		        console.log(item, loaded, total);
@@ -213,12 +225,13 @@
 		    //GUI
 		    var guiControls = new function(){
 		    	this.speed = 0.2;
-		    	this.sound = 0.5;	
+		    	this.sound = 0.5;
+		    	this.lightAngle = spotLight.angle;	
 		    }
 		    var datGUI = new dat.GUI();
 		    datGUI.add(guiControls, 'speed', 0.01, 1);
 		    datGUI.add(guiControls, 'sound', 0.0, 1);
-
+		    datGUI.add(guiControls, 'lightAngle', 0, Math.PI / 2 );
 		    
 
 		    
@@ -239,10 +252,12 @@
 
 
 		 	var update = function(){
-				//t += 0.01;
+				
 				snowUniforms.time.value += guiControls.speed;
 				sound.setVolume(guiControls.sound);
+				spotLight.angle = guiControls.lightAngle;
 				console.log(snowUniforms.counter.value)
+
 			};
 			
 			
@@ -256,12 +271,12 @@
 			};
 
 			//Run game loop (update, render, repeat)
-			var GameLoop = function(){
+			var gameLoop = function(){
 
-				requestAnimationFrame(GameLoop);
+				requestAnimationFrame(gameLoop);
 				update();
 				render();
 			};
 
 			
-			GameLoop();
+			gameLoop();
