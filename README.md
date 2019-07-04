@@ -11,13 +11,6 @@
 
 ##### A well and examples fully documentation si available here: [Three.js](https://threejs.org)
 
-### Performances
-It’s not easy to evaluate performances of a system strongly based on hardware design and software optimization. It’s only possible make some considerations:
-* Using a MacBook Pro Retina (2,4 GHz Intel Core i5, Intel Iris 1536 MB) and Safari as reference, were observed results below:
-with 50K, 100K or 150K particles, the frame-rate is always 60.
-The system has good performances as expected. 
-
-
 ### Introduction 
 * A particle-system is a simple representation of a natural phenomena. 
 * Our aim is to create a snowfall effect into a snowball.
@@ -43,15 +36,18 @@ The system has good performances as expected.
   
  ![picture alt](./images/snowformulation.jpg)
 
-### Performances 
-* Using a Macbook pro and Safari as reference:
 
+### Performances
+
+It’s not easy to evaluate performances of a system strongly based on hardware design and software optimization. It’s only possible make some considerations:
+* Using a MacBook Pro Retina (2,4 GHz Intel Core i5, Intel Iris 1536 MB) and Safari as reference, were observed results below:
 | Snow Particles  | FPS         |
 |:-------------:|:-------------:|
 | 50K            | 60fps        |
 | 100K           | 60fps        |
 | 150K           | 60fps        |     
 
+* The system has good performances as expected. 
 
 ### Conclusions
 
