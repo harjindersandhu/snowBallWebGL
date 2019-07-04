@@ -41,8 +41,9 @@
 
 It’s not easy to evaluate performances of a system strongly based on hardware design and software optimization. It’s only possible make some considerations:
 * Using a MacBook Pro Retina (2,4 GHz Intel Core i5, Intel Iris 1536 MB) and Safari as reference, were observed results below:
-| Snow Particles  | FPS         |
-|:-------------:|:-------------:|
+
+| Snow Particles | FPS          |
+|:--------------:|:------------:|
 | 50K            | 60fps        |
 | 100K           | 60fps        |
 | 150K           | 60fps        |     
